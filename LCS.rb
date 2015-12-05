@@ -81,15 +81,5 @@ class LCS
       end        
     end  
     
-    # Pruebas
-    s1 = "pollinazione";
-    s2 = "pollenation";   
-    s = LCS.new
-    puts s.lcsr(s1,s2)
-    if (s.similars(s1,s2,70))
-      puts "Son similares"
-    else
-      puts "No son similares"      
-    end
       
 end

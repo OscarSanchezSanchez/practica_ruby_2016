@@ -75,8 +75,15 @@
 #  result_ex4.sort_by! do |item|
 #      item[:title]
 #  end
-  puts result_ex4.sort!()
-
+  #puts result_ex4.sort!()
   #end ejercicio4
+  
+  #ejercicio7
+  files.each() do |file|
+    aux = file.exercise_7()
+    if aux!=nil
+      puts aux
+    end
+  end  
   
   

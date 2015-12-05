@@ -78,12 +78,21 @@
   #puts result_ex4.sort!()
   #end ejercicio4
   
-  #ejercicio7
+  #ejercicio6
+  result_ex6 = Array.new()
   files.each() do |file|
-    aux = file.exercise_7()
-    if aux!=nil
-      puts aux
-    end
-  end  
+    file.exercise_6("3667821")
+  end
   
+#  #ejercicio7
+#  files.each() do |file|
+#    aux = file.exercise_7()
+#    if aux!=nil
+#      puts aux
+#    end
+#  end  
+#  #end ejercicio7
+  
+  puts "hola,".chomp(',')
+
   

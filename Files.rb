@@ -50,6 +50,22 @@ class Files
   def exercise_4(magazine_name,acronym)
     #implementación en la clase hija articles
   end
+  #end ejercicio4
+  
+  #ejercicio6
+  def exercise_6(id)
+    if id === self.ID()
+      list_p = self.acronym_list_with_parenthesis()
+      list = self.acronym_list()
+      sections = self.sections()
+      for i in (0..list.length-1)
+        aux = Files.count_acronym(list[i],list_p[i],sections).to_s
+        puts list[i]+": aparece " + aux +" veces"
+      end
+      
+    end
+  end
+  
   #ejercicio7
   def exercise_7
     list = self.acronym_list
@@ -59,6 +75,7 @@ class Files
       return nil
     end
   end
+  #end ejercicio7
   
   #funcion para encontrar la lista de acronimos de los ficheros
   def acronym_list_with_parenthesis
@@ -77,6 +94,7 @@ class Files
     return array_return
   end
   
+  #lista de acronimos sin parentesis 
   def acronym_list
     array_return = Array.new()
     sections = self.sections()
@@ -84,14 +102,14 @@ class Files
       section_aux = section.to_s.split(' ')
       section_aux.each() do |word|
         if word != "\n"
-          if Files.is_acronym(word) && word.length > 3
+          if Files.is_acronym(word) && word.length > 3 && !(array_return.include?(word) )
             array_return.push(word)
           end
         end
       end
     end
     Files.clean_acronym(array_return)
-    return array_return.sort!()
+    return array_return
   end
   
   protected 
@@ -101,11 +119,30 @@ class Files
     end
   end
   
+  #funcion que cuenta el numero de apariciones de un acronimo
+  protected
+  def self.count_acronym(acronym,acronym_p,sections)#primer argumento es el acronimo, el segundo el acronimo con parentesis y el tercero las secciones
+    cont = 0
+    utils = LCS.new()
+    sections.each() do |section|
+      section = section.to_s.split(' ')
+      section.each() do |word|
+        if utils.similars(word,acronym,95) || utils.similars(word,acronym_p,95)
+          cont += 1
+        end
+      end
+    end
+    return cont
+  end
   
   protected
   def self.is_acronym(acronym)
+    #meter algo para que no coja palabras entre parentesis que sean todo en minuscula
     utils = LCS.new()
     last_index = acronym.length-1
+    if acronym.length > 10
+      return false
+    end
     if acronym[last_index] === ';'
       acronym.chomp(';')
       last_index = acronym.length-2
@@ -122,10 +159,18 @@ class Files
       acronym.chomp(',')
       last_index = acronym.length-2
     end
-    if acronym[0] === '(' && acronym[last_index] === ')'
+    if acronym[0] === '(' && acronym[last_index] === ')'#mejorar el filtrado, no coge bien los acronimos 
       aux = acronym.upcase()
-      return utils.similars(aux,acronym,75)
+      if aux[1] === acronym[1] && aux[2] === acronym[2] && !Files.is_number?(acronym[2])
+        return utils.similars(aux,acronym,90)
+      end
     end
   end
+  
+  protected
+  def self.is_number? string
+    true if Float(string) rescue false
+  end
+  
 end
 #end of Class Files

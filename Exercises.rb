@@ -5,10 +5,11 @@ class Exercises
   require "Articles.rb"
   require "Documents.rb"
   require "Acronym.rb"
+  require "Cluster"
 
   attr_accessor :files
   
-  def initialize
+  def initialize()
     #leemos todos los archivos y los metemos en un array de string
     utils = FileUtils.new()
     files_without_format = utils.read_without_format()
@@ -31,10 +32,10 @@ class Exercises
   #fin lectura y formateo de ficheros
   
   #ejercicio 1
-  def ejercicio1
+  def ejercicio1(year)
     result_ex1 = Array.new()
-    files.each() do |file|
-      aux = file.exercise_1("2015")
+    @files.each() do |file|
+      aux = file.exercise_1(year)
       if aux != nil
         result_ex1.push(aux)
       end
@@ -44,64 +45,81 @@ class Exercises
   #puts result_ex1.sort()
   #end ejercicio1
   
-#  #ejercicio 2
-#  result_ex2 = Array.new()
-#  files.each() do |file|
-#    if file.at_or_do() == 1
-#      if not result_ex2.include?(file.magazine_name())
-#        result_ex2.push(file.exercise_2())
-#      end
-#    end
-#  end
-#  #puts result_ex2.sort!()
-#  #end ejercicio2
-#  
-#  #ejercicio3
-#  result_ex3 = Array.new()
-#  files.each() do |file|
-#    aux = file.exercise_3('ALS')
-#    if not result_ex3.include?(aux)
-#      if aux!=nil
-#        result_ex3.push(aux)
-#      end
-#    end
-#  end
-#  #puts result_ex3.sort!()
-#  #end ejercicio3
-#  
-#  #ejercicio4
-#  result_ex4 = Array.new()
-#  #coger acronimo y nombre de revista por pantalla
-#  files.each() do |file|
-#    aux = file.exercise_4("PLoS ONE","USH")
-#    if not result_ex4.include?(aux)
-#      if aux != nil
-#        result_ex4.push(aux)
-#      end
-#    end
-#  end
-##  result_ex4.sort_by! do |item|
-##      item[:title]
-##  end
-#  #puts result_ex4.sort!()
-#  #end ejercicio4
-#  
-#  #ejercicio6
-#  result_ex6 = Array.new()
-#  files.each() do |file|
-#    file.exercise_6("3667821")
-#  end
-#  #end ejercicio6
+  #ejercicio 2
+  def ejercicio2()
+    result_ex2 = Array.new()
+    @files.each() do |file|
+      if file.at_or_do() == 1
+        if not result_ex2.include?(file.magazine_name())
+          result_ex2.push(file.exercise_2())
+        end
+      end
+    end
+    return result_ex2
+  end
+  #puts result_ex2.sort!()
+  #end ejercicio2
   
+  #ejercicio3
+  def ejercicio3(acronym)
+    result_ex3 = Array.new()
+    @files.each() do |file|
+      aux = file.exercise_3(acronym)
+      if not result_ex3.include?(aux)
+        if aux!=nil
+          result_ex3.push(aux)
+        end
+      end
+    end
+    return result_ex3
+  end
+  #puts result_ex3.sort!()
+  #end ejercicio3
+  
+  #ejercicio4
+  def ejercicio4(magazine_name,acronym)
+    result_ex4 = Array.new()
+    #coger acronimo y nombre de revista por pantalla
+    @files.each() do |file|
+      aux = file.exercise_4(magazine_name,acronym)
+      if not result_ex4.include?(aux)
+        if aux != nil
+          result_ex4.push(aux)
+        end
+      end
+    end
+    return result_ex4
+  end
+#  result_ex4.sort_by! do |item|
+#      item[:title]
+#  end
+  #puts result_ex4.sort!()
+  #end ejercicio4
+ 
   #ejercicio5
-  result_ex5 = Array.new()
-  files.each() do |file|
-    if file.year() === "2015" #pedir por pantalla
-      result_ex5.push(file.exercise_5)
+  def ejercicio5()
+    result_ex5 = Array.new()
+    @files.each() do |file|
+      if file.year() === "2015" #pedir por pantalla
+        result_ex5.push(file.exercise_5)
+      end
+    end
+    return result_ex5
+  end
+#  puts result_ex5[1][0].expanded_form
+#  puts result_ex5[1][0].acronym 
+  
+  
+  #ejercicio6
+  def ejercicio6
+    result_ex6 = Array.new()
+    files.each() do |file|
+      file.exercise_6("3667821")
     end
   end
-  puts result_ex5[1][0].expanded_form
-  puts result_ex5[1][0].acronym
+  #end ejercicio6
+  
+
 #  
 #  #ejercicio7
 #  files.each() do |file|
@@ -130,9 +148,35 @@ class Exercises
 ####    end
 ####  puts bb[0].reverse().to_s
 ####   
-  
+  #ejercicio9
+  def ejercicio9
+    utils = LCS.new() 
+    number_cluster = 1
+    cluster = Cluster.new()
+    for i in (0..@files.length-1)
+      file = @files[i]
+      for j in (0..@files.length-1)
+        if (j == i)
+          next
+        end
+        cluster.groups().push(Array.new())
+        file_compare = @files[j]
+        acronyms_compare = file_compare.acronyms
+        cluster.groups()[i].push(file.ID()+" - "+file.title())
+        if (utils.similars(file.title(),file_compare.title(),85)) 
+          cluster.groups()[i].push(file_compare.ID()+" - "+file_compare.title())
+        end
+      end
+      if cluster.groups()[i].length() < 1 
+        cluster.groups().delete_at(i)
+      else
+        number_cluster = number_cluster + 1
+      end
+    end
+    cluster.number=(number_cluster)
+    return cluster
+  end
 end 
-  
   
   
   

@@ -99,7 +99,10 @@ class Files
   end
   #end ejercicio8
   
-  
+  #ejercicio9
+  def exercise_9
+    
+  end
 #funciones para sacar la lista de acronimos de un fichero  
   #funcion para encontrar la lista de acronimos de los ficheros
   protected
@@ -197,7 +200,7 @@ class Files
  
 #funciones para recuperar los acronimos con su forma expandida 
   protected 
-  def take_expanded_form
+  def take_expanded_form()
     list_p = self.acronyms_parenthesis()
     sections = self.sections()
     result = Array.new()
@@ -213,35 +216,69 @@ class Files
   #funcion que busca un acronimo y devuelve un objeto acronimo con su forma expandida y el nombre del acronimo
   def search_expanded(acronym,sections_split)
     aux = ""
-    #puts sections_split
     for i in (0..sections_split.length-1)
       if sections_split[i+(acronym.length-2)] != nil
         if acronym === sections_split[i] 
           if (acronym.length-2) == 6
-            aux = sections_split[i+7] + " " + sections_split[i+6] + " " +  sections_split[i+5] + " " + sections_split[i+4] + " " +  sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]  
+            aux = (sections_split[i+7]) + " " + sections_split[i+6] + " " + sections_split[i+5] + " " + sections_split[i+4] + " " + sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
             break
           end
           if (acronym.length-2) == 5
-            aux = sections_split[i+6] + " " + sections_split[i+5] + " " +  sections_split[i+4] + " " + sections_split[i+3] + " " +  sections_split[i+2] + " " + sections_split[i+1]  
+            aux = sections_split[i+6] + " " + sections_split[i+5] + " " + sections_split[i+4] + " " + sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
             break
           end
           if (acronym.length-2) == 4
-            aux = sections_split[i+5] + " " + sections_split[i+4] + " " +  sections_split[i+3] + " " + sections_split[i+2] + " " +  sections_split[i+1]  
+            aux = sections_split[i+5] + " " + sections_split[i+4] + " " + sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
             break
           end
           if (acronym.length-2) == 3
-            aux = sections_split[i+4] + " " + sections_split[i+3] + " " +  sections_split[i+2] + " " + sections_split[i+1]  
+            aux = sections_split[i+4] + " " + sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
             break
           end
           if (acronym.length-2) == 2
-            aux = sections_split[i+3] + " " + sections_split[i+2] + " " +  sections_split[i+1]
+            aux = sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
             break
           end
         end
       end
     end
+    #aux = Files.confirm_expanded_form(acronym,aux)
     return Acronym.new(acronym,aux)
   end
+  #end search_expanded
+  
+  #funcion que confirma la forma expandida de un acronimo, comprueba que las letras del acronimo son similares a las escogidas de la forma expandida
+  def self.confirm_expanded_form(acronym,expanded)
+    utils = LCS.new()
+    expanded_aux = expanded.split(" ").reverse()
+    acronym_aux = acronym.reverse()
+    result = Array.new()
+    i = 1
+    j = 0
+    size_acronym = acronym.length-2
+    cont = size_acronym
+    while (i<=size_acronym) && (cont>0)
+      if aux[j] != nil
+
+        if aux[j].include?(acronym[i])
+          result.push(aux[j])
+          
+          cont = cont - 1
+          i = i + 1
+        else
+          j = j + 1 
+        end  
+      end     
+    end
+#    result2 = ""
+#    aux.each() do |word|
+#      result2 = result2 + word + " "
+#    end
+#    puts result2
+    return result
+  end
+  
+  
 #end funciones para recuperar forma expandida   
   protected
   def self.is_number? string

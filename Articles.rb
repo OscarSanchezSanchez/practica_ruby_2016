@@ -15,6 +15,8 @@ class Articles < Files
       @title = file[4]
       @sections = take_sections_article(file)
       @at_or_do = 1
+      @acronyms = self.acronym_list()
+      @acronyms_parenthesis = self.acronym_list_with_parenthesis()
   end
   
   #funcion que comprueba si un string es un articulo
@@ -76,6 +78,21 @@ class Articles < Files
     else
       return nil 
     end
+  end
+  
+  #muestra la información de un articulo
+  def show_information
+    puts "-" *15
+    puts "Title: "+ self.title()
+    puts "Abstract: " + self.sections[1]
+    puts "Section number: " + self.count_sections().to_s
+    sections = self.show_sections()
+    puts "Sections: "
+    sections.each() do |section|
+      puts section.to_s
+    end
+    puts "-" *15
+    puts "\n"
   end
 end
 #end of class Articles

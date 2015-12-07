@@ -9,6 +9,8 @@ class Documents < Files
       @title = file[2]
       @sections = take_sections_document(file)
       @at_or_do = 2
+      @acronyms= self.acronym_list()
+      @acronyms_parenthesis = self.acronym_list_with_parenthesis()
   end
 
   def take_sections_document(file)
@@ -44,5 +46,20 @@ class Documents < Files
     super(acronym)
   end
   #end ejercico3
+  
+  #muestra la información de un documento de la wikipedia
+  def show_information
+    puts "-" *15
+    puts "Title: "+ self.title() + " " + self.year()
+    puts "Introduction: " + self.sections[2]
+    puts "Section number: " + self.count_sections().to_s
+    puts "Sections: "
+    sections = self.show_sections()
+    sections.each() do |section|
+      puts section.to_s
+    end
+    puts "-" *15
+    puts "\n"
+  end
 end
 #end of class Documents

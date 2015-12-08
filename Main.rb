@@ -18,7 +18,9 @@ class Main
 
   
   for i in (1..a.number())
-    puts "Cluster "+i.to_s
-    puts a.groups()[i]
+    if  not (a.groups()[i].empty?)
+      puts "Cluster "+i.to_s
+      puts a.groups()[i]
+    end
   end
 end

@@ -155,25 +155,34 @@ class Exercises
     cluster = Cluster.new()
     for i in (0..@files.length-1)
       file = @files[i]
+      acronym_string1 = "" #string donde pondremos toda la lista de acronimos de un fichero 
+      for k in (0..file.acronyms.length-1)
+        acronym_string1 = acronym_string1 + file.acronyms[k] + " "
+      end
+      cluster.groups().push(Array.new())
+      cluster.groups()[i].push(file.ID()+" - "+file.title())
       for j in (0..@files.length-1)
         if (j == i)
           next
         end
-        cluster.groups().push(Array.new())
         file_compare = @files[j]
-        acronyms_compare = file_compare.acronyms
-        cluster.groups()[i].push(file.ID()+" - "+file.title())
-        if (utils.similars(file.title(),file_compare.title(),85)) 
+        acronym_string2 = "" #string donde pondremos toda la lista de acronimos de un fichero 
+        for k in (0..(file.acronyms.length-1))
+          if file_compare.acronyms[k] !=nil
+            acronym_string2 = acronym_string2 + file_compare.acronyms[k] + " "
+          end
+        end
+        if (utils.similars(file.title(),file_compare.title(),10)) && (utils.similars(acronym_string1,acronym_string2,20)) 
           cluster.groups()[i].push(file_compare.ID()+" - "+file_compare.title())
         end
       end
-      if cluster.groups()[i].length() < 1 
-        cluster.groups().delete_at(i)
+      if cluster.groups()[i].length() <= 1 
+        cluster.groups()[i].clear()
       else
         number_cluster = number_cluster + 1
       end
     end
-    cluster.number=(number_cluster)
+    cluster.number = (number_cluster)
     return cluster
   end
 end 

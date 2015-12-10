@@ -1,6 +1,5 @@
 class Acronym
-  attr_accessor :acronym
-  attr_accessor :expanded_form
+  attr_accessor :acronym , :expanded_form
   
   def initialize()
     @acronym = ""
@@ -11,7 +10,10 @@ class Acronym
     @acronym = a
     @expanded_form = expanded
   end
-  def get_acronym()
-    return @acronym
+
+  def show_acronym()
+    if ((@acronym != nil) && (@expanded_form != nil)&& (@acronym != "") && (@expanded_form != ""))
+      puts @acronym + " -- " + @expanded_form 
+    end  
   end
 end

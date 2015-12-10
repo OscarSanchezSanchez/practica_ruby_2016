@@ -43,8 +43,8 @@ class Articles < Files
   
   #ejercicio1
   def exercise_1(year)
-    if (year == self.year())
-      return self.title()
+    if (year == @year)
+      return @title
     else
       return nil
     end
@@ -52,7 +52,7 @@ class Articles < Files
   
   #ejercicio2
   def exercise_2()
-    return self.magazine_name()
+    return @magazine_name
   end  
   #ejercicio3
   def exercise_3(acronym)
@@ -62,8 +62,8 @@ class Articles < Files
   def exercise_4(magazine_name,acronym)
     found = false
     # magazine_name == self.magazine_name() no compara los string bien 
-    if (self.magazine_name().include?(magazine_name))
-      aux = self.sections()
+    if (@magazine_name.include?(magazine_name))
+      aux = @sections
       aux.each() do |section|
         if section.include?(acronym)
           found = true
@@ -71,7 +71,7 @@ class Articles < Files
         end
       end
       if found
-        return self.title()
+        return @title
       else
         return nil
       end 
@@ -83,8 +83,8 @@ class Articles < Files
   #muestra la información de un articulo
   def show_information
     puts "-" *15
-    puts "Title: "+ self.title()
-    puts "Abstract: " + self.sections[1]
+    puts "Title: "+ @title
+    puts "Abstract: " + @sections[1]
     puts "Section number: " + self.count_sections().to_s
     sections = self.show_sections()
     puts "Sections: "

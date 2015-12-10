@@ -7,7 +7,8 @@ class Exercises
   require "Acronym.rb"
   require "Cluster"
 
-  attr_accessor :files
+  attr_accessor :files, :groups
+  
   
   def initialize()
     #leemos todos los archivos y los metemos en un array de string
@@ -28,10 +29,11 @@ class Exercises
         @files << x
       end
     end
+    @groups = clusters
   end
   #fin lectura y formateo de ficheros
   
-  #ejercicio 1
+#################################################  ejercicio 1  #################################################################
   def ejercicio1(year)
     result_ex1 = Array.new()
     @files.each() do |file|
@@ -45,7 +47,7 @@ class Exercises
   #puts result_ex1.sort()
   #end ejercicio1
   
-  #ejercicio 2
+#################################################  ejercicio 2  #################################################################
   def ejercicio2()
     result_ex2 = Array.new()
     @files.each() do |file|
@@ -55,12 +57,12 @@ class Exercises
         end
       end
     end
-    return result_ex2
+    return result_ex2.sort!()
   end
   #puts result_ex2.sort!()
   #end ejercicio2
   
-  #ejercicio3
+#################################################  ejercicio 3  #################################################################
   def ejercicio3(acronym)
     result_ex3 = Array.new()
     @files.each() do |file|
@@ -76,7 +78,7 @@ class Exercises
   #puts result_ex3.sort!()
   #end ejercicio3
   
-  #ejercicio4
+#################################################  ejercicio 4  #################################################################
   def ejercicio4(magazine_name,acronym)
     result_ex4 = Array.new()
     #coger acronimo y nombre de revista por pantalla
@@ -96,11 +98,22 @@ class Exercises
   #puts result_ex4.sort!()
   #end ejercicio4
  
-  #ejercicio5
-  def ejercicio5()
+#################################################  ejercicio 5  #################################################################
+  def ejercicio5(year)
+    list = search_expanded_form_by_year(year)
+    for i in (0..list.length-1)
+      for j in (0..list[i].length())
+        if list[i][j] != nil && list[i][j] != ""
+          puts list[i][j].show_acronym
+        end
+      end
+    end
+  end
+  
+  def search_expanded_form_by_year(year)
     result_ex5 = Array.new()
     @files.each() do |file|
-      if file.year() === "2015" #pedir por pantalla
+      if file.year() === year #pedir por pantalla
         result_ex5.push(file.exercise_5)
       end
     end
@@ -110,46 +123,47 @@ class Exercises
 #  puts result_ex5[1][0].acronym 
   
   
-  #ejercicio6
-  def ejercicio6
+#################################################  ejercicio 6  #################################################################
+  def ejercicio6(id)
     result_ex6 = Array.new()
-    files.each() do |file|
-      file.exercise_6("3667821")
+    @files.each() do |file|
+      file.exercise_6(id)
     end
   end
   #end ejercicio6
   
+#################################################  ejercicio 7  #################################################################
+  def ejercicio7()
+    @files.each() do |file|
+      aux = file.exercise_7()
+      if aux!=nil
+        puts aux
+      end
+    end
+  end
 
-#  
-#  #ejercicio7
-#  files.each() do |file|
-#    aux = file.exercise_7()
-#    if aux!=nil
-#      puts aux
-#    end
-#  end  
-#  #end ejercicio7
-#
-#  #ejercicio8
-#  files.each() do |file|
-#    file.exercise_8("ALS")
-#  end
-#  
-#
-#  
-####  aux =["hola manolo lama","adios paco gonzalez","pedo con sida"]
-####    
-####    bb = Array.new()
-####    for i in (0..2)
-####     bb[i] = aux[i].to_s.split(" ")
-####    end
-####    for i in (0..1)
-####      bb[0].concat(bb[i+1]) 
-####    end
-####  puts bb[0].reverse().to_s
-####   
-  #ejercicio9
+#################################################  ejercicio 8  #################################################################
+  def ejercicio8(acronym)
+    @files.each() do |file|
+      file.exercise_8(acronym)
+    end
+  end
+    
+#################################################  ejercicio 9  #################################################################
   def ejercicio9
+    if @groups.groups().empty?
+      puts "no se ha obtenido ningún grupo"
+    else   
+      for i in (0..(@groups.groups().length()-1))
+        puts "Cluster " + (i+1).to_s
+        for j in (0..(@groups.groups()[i].length()-1))
+          puts @groups.groups()[i][j].ID()+ " - " + @groups.groups()[i][j].title()
+        end
+      end
+    end
+  end
+  #funcion que inicializa el atributo groups de la clase exercises, para despues mostrar los clusters en la llamada a la funcion ejercicio9
+  def clusters
     utils = LCS.new() 
     number_cluster = 1
     cluster = Cluster.new()
@@ -159,8 +173,8 @@ class Exercises
       for k in (0..file.acronyms.length-1)
         acronym_string1 = acronym_string1 + file.acronyms[k] + " "
       end
-      cluster.groups().push(Array.new())
-      cluster.groups()[i].push(file.ID()+" - "+file.title())
+      cluster.groups()[number_cluster-1] = Array.new()
+      cluster.groups()[number_cluster-1].push(file)
       for j in (0..@files.length-1)
         if (j == i)
           next
@@ -172,20 +186,86 @@ class Exercises
             acronym_string2 = acronym_string2 + file_compare.acronyms[k] + " "
           end
         end
-        if (utils.similars(file.title(),file_compare.title(),10)) && (utils.similars(acronym_string1,acronym_string2,20)) 
-          cluster.groups()[i].push(file_compare.ID()+" - "+file_compare.title())
+        if (utils.similars(file.title(),file_compare.title(),15)) && (utils.similars(acronym_string1,acronym_string2,25)) 
+          cluster.groups()[number_cluster-1].push(file_compare)
         end
       end
-      if cluster.groups()[i].length() <= 1 
-        cluster.groups()[i].clear()
+      if cluster.groups()[number_cluster-1].length() <= 1 
+        cluster.groups().delete_at(number_cluster-1)
       else
         number_cluster = number_cluster + 1
+      end#if
+    end#for grande
+    return cluster
+  end#ejercicio9
+  
+  
+#################################################  ejercicio 10  #################################################################
+  def ejercicio10()  
+    puts "numero de grupos: " + @groups.groups().length().to_s
+    puts "numero medio de documentos por grupo: " + self.groups_average().to_s
+    puts "numero medio de articulos cientificos por grupo: " + self.average_article().to_s
+    puts "numero medio de documentos de wikipedia por grupo: " + self.average_document().to_s
+    puts "numero de grupos con todos los documentos de la misma fecha: " + self.equal_year()[0].to_s
+    puts "numero de grupos con documentos de fechas variadas: " + self.equal_year()[1].to_s
+    puts "numero de grupos con solo un documento: 0" #la funcion que crea los grupos excluye los grupos de un solo documento, ya que he considerado que para ser grupo necesita mas de un documento
+  end
+  
+  protected
+  def groups_average()
+    counter = 0
+    for i in (0..(@groups.groups().length()-1))
+      for j in (0..(@groups.groups()[i].length()-1))
+        counter = counter + 1
       end
     end
-    cluster.number = (number_cluster)
-    return cluster
+    return (counter/@groups.groups().length())
   end
-end 
   
+  def average_article()
+    counter = 0
+    for i in (0..(@groups.groups().length()-1))
+      for j in (0..(@groups.groups()[i].length()-1))
+        if @groups.groups()[i][j].at_or_do == 1
+          counter = counter + 1
+        end
+      end
+    end
+    return (counter/@groups.groups().length())
+  end
+  
+  
+  def average_document()
+    counter = 0
+    for i in (0..(@groups.groups().length()-1))
+      for j in (0..(@groups.groups()[i].length()-1))
+        if @groups.groups()[i][j].at_or_do == 2
+          counter = counter + 1
+        end
+      end
+    end
+    return (counter/@groups.groups().length())
+  end
+  
+  
+  def equal_year()
+    k=0
+    counter_equal = 0
+    counter_not_equal = 0  
+    for i in (0..(@groups.groups().length()-1))
+      for j in (1..(@groups.groups()[i].length()-1))
+        if @groups.groups[i][k].year() != @groups.groups[i][j].year()
+          counter_not_equal = counter_not_equal + 1 
+          break
+        end
+      end
+    end
+    result = Array.new()
+    counter_equal = @groups.groups().length() - counter_not_equal
+    result.push(counter_equal)
+    result.push(counter_not_equal)
+    return result
+  end
+end#class
   
   

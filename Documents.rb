@@ -34,8 +34,8 @@ class Documents < Files
   
   #ejercicio1
   def exercise_1(year)
-    if (year == self.year())
-      return self.title()
+    if (year == @year)
+      return @title
     else
       return nil
     end
@@ -50,8 +50,8 @@ class Documents < Files
   #muestra la información de un documento de la wikipedia
   def show_information
     puts "-" *15
-    puts "Title: "+ self.title() + " " + self.year()
-    puts "Introduction: " + self.sections[2]
+    puts "Title: "+ @title + " " + @year
+    puts "Introduction: " + @sections[2]
     puts "Section number: " + self.count_sections().to_s
     puts "Sections: "
     sections = self.show_sections()

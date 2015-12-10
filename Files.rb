@@ -3,12 +3,7 @@ class Files
   require "LCS"
   require "Acronym.rb"
   
-  attr_reader :ID 
-  attr_reader :year
-  attr_reader :title
-  attr_reader :sections
-  attr_reader :acronyms
-  attr_reader :acronyms_parenthesis
+  attr_reader :ID , :year ,:title , :sections , :acronyms , :acronyms_parenthesis 
   attr_reader :at_or_do # 0 para inicializar, 1 si es articulo y 2 si es documento
   
   def initialize()
@@ -16,7 +11,7 @@ class Files
     @year = ''
     @title = ''
     @sections = Array.new()
-    @at_or_do = Array.new()
+    @at_or_do = 0
     @acronyms = Array.new()
     @acronyms_parenthesis = Array.new()
   end
@@ -24,19 +19,20 @@ class Files
   def acronym_list()
     #implementan las clases hijas
   end
-
+  #################################################  ejercicio 1  #################################################################
   def exercise_1(year)
     #implemantan las clases hijas
   end
   
+  #################################################  ejercicio 2  #################################################################
   def exercise_2
     #implemantada en la clase hija article, ya que nombre de revista solo esta disponible en esta
   end
 
-  #ejercicio3
+  #################################################  ejercicio 3  #################################################################
   def exercise_3(acronym)
     found = false
-    self.sections().each() do |section|
+    @sections.each() do |section|
       if section != nil 
         if section.include?(acronym)#or (section.include?("("+acronym+")"))
             found = true
@@ -45,42 +41,40 @@ class Files
       end
     end
     if found 
-      return self.title()
+      return @title
     end
   end
 
   #end ejercicio3
   
-  #ejercicio4
+  #################################################  ejercicio 4  #################################################################
   def exercise_4(magazine_name,acronym)
     #implementación en la clase hija articles
   end
   #end ejercicio4
   
-  #ejercicio5
+  #################################################  ejercicio 5  #################################################################
   def exercise_5
     return take_expanded_form()
   end
   
   
-  #ejercicio6
+  #################################################  ejercicio 6  #################################################################
   def exercise_6(id)
-    if id === self.ID()
-      list_p = self.acronyms()
-      list = self.acronyms_parenthesis()
-      sections = self.sections()
+    if id === @ID
+      list_p = @acronyms
+      list = @acronyms_parenthesis
+      sections = @sections
       for i in (0..list.length()-1)
         if list[i] != nil && list_p[i] != nil
-          puts list[i]
           aux = Files.count_acronym(list[i].to_s,list_p[i],sections).to_s
           puts list[i]+": aparece " + aux +" veces"
         end
       end
-      
     end
   end
   
-  #ejercicio7
+#################################################  ejercicio 7  #################################################################
   def exercise_7
     
     if @acronyms.empty?
@@ -91,9 +85,9 @@ class Files
   end
   #end ejercicio7
   
-  #ejercicio8 
+#################################################  ejercicio 8  #################################################################
   def exercise_8(acronym)
-    if self.acronyms().include?(acronym)
+    if @acronyms.include?(acronym)
       self.show_information()
     end
   end
@@ -103,12 +97,12 @@ class Files
   def exercise_9
     
   end
-#funciones para sacar la lista de acronimos de un fichero  
+#############################  funciones para sacar la lista de acronimos de un fichero  #########################################
   #funcion para encontrar la lista de acronimos de los ficheros
   protected
   def acronym_list_with_parenthesis
     array_return = Array.new()
-    sections = self.sections()
+    sections = @sections
     sections.each() do |section|
       section_aux = section.to_s.split(' ')
       section_aux.each() do |word|
@@ -126,7 +120,7 @@ class Files
   protected
   def acronym_list
     array_return = Array.new()
-    sections = self.sections()
+    sections = @sections
     sections.each() do |section|
       section_aux = section.to_s.split(' ')
       section_aux.each() do |word|
@@ -148,29 +142,11 @@ class Files
     end
   end
   
-  #funcion que cuenta el numero de apariciones de un acronimo
-  protected
-  def self.count_acronym(acronym,acronym_p,sections)#primer argumento es el acronimo, el segundo el acronimo con parentesis y el tercero las secciones
-    cont = 0
-    utils = LCS.new()
-    sections.each() do |section|
-      section = section.to_s.split(' ')
-      section.each() do |word|
-        if word != nil
-          if utils.similars(word,acronym,95) || utils.similars(word,acronym_p,95)
-            cont += 1
-          end
-        end
-      end
-    end
-    return cont
-  end
-  
   protected
   def self.is_acronym(acronym)
     utils = LCS.new()
     last_index = acronym.length-1
-    if acronym.length > 10
+    if acronym.length > 7
       return false
     end
     if acronym[last_index] === ';'
@@ -189,65 +165,88 @@ class Files
       acronym.chomp(',')
       last_index = acronym.length-2
     end
-    if acronym[0] === '(' && acronym[last_index] === ')'#mejorar el filtrado, no coge bien los acronimos 
+    if acronym[0] === '(' && acronym[last_index] === ')'
       aux = acronym.upcase()
-      if aux[1] === acronym[1] && aux[2] === acronym[2] && !Files.is_number?(acronym[2])
+      if aux[1] === acronym[1] && aux[2] === acronym[2] && !Files.is_number?(acronym[1]) && !Files.is_number?(acronym[2]) 
         return utils.similars(aux,acronym,90)
       end
     end
   end
+  
+  #funcion que cuenta el numero de apariciones de un acronimo
+  protected
+  def self.count_acronym(acronym,acronym_p,sections)#primer argumento es el acronimo, el segundo el acronimo con parentesis y el tercero las secciones
+    cont = 0
+    utils = LCS.new()
+    sections.each() do |section|
+      section = section.to_s.split(' ')
+      section.each() do |word|
+        if word != nil
+          if utils.similars(word,acronym,95) || utils.similars(word,acronym_p,95)
+            cont += 1
+          end
+        end
+      end
+    end
+    return cont
+  end
 #end funciones lista de acronimos
  
-#funciones para recuperar los acronimos con su forma expandida 
+##########################  #funciones para recuperar los acronimos con su forma expandida ########################################
   protected 
   def take_expanded_form()
-    list_p = self.acronyms_parenthesis()
-    sections = self.sections()
+    list_p = @acronyms_parenthesis
+    list = @acronyms
+    sections = @sections
     result = Array.new()
     aux = Files.split_all_sections(sections) 
     
     for i in (0..list_p.length-1)
-      result[i] = search_expanded(list_p[i],aux)
+      result[i] = search_expanded(list_p[i],aux,list[i])
     end
     return result 
   end
   
-  
   #funcion que busca un acronimo y devuelve un objeto acronimo con su forma expandida y el nombre del acronimo
-  def search_expanded(acronym,sections_split)
+  def search_expanded(acronym,sections_split,acronym2)
     aux = ""
     for i in (0..sections_split.length-1)
       if sections_split[i+(acronym.length-2)] != nil
         if acronym === sections_split[i] 
-          if (acronym.length-2) == 6
-            aux = (sections_split[i+7]) + " " + sections_split[i+6] + " " + sections_split[i+5] + " " + sections_split[i+4] + " " + sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
+          if (acronym.length-2) == 7
+            aux = sections_split[i+7] + " " + sections_split[i+6] + " " + sections_split[i+5] + " " + sections_split[i+4] + " " + sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
             break
           end
-          if (acronym.length-2) == 5
+          if (acronym.length-2) == 6
             aux = sections_split[i+6] + " " + sections_split[i+5] + " " + sections_split[i+4] + " " + sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
             break
           end
-          if (acronym.length-2) == 4
+          if (acronym.length-2) == 5
             aux = sections_split[i+5] + " " + sections_split[i+4] + " " + sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
             break
           end
-          if (acronym.length-2) == 3
+          if (acronym.length-2) == 4
             aux = sections_split[i+4] + " " + sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
             break
           end
-          if (acronym.length-2) == 2
+          if (acronym.length-2) == 3
             aux = sections_split[i+3] + " " + sections_split[i+2] + " " + sections_split[i+1]
+            break
+          end
+          if (acronym.length-2) == 2
+            aux = sections_split[i+2] + " " + sections_split[i+1]
             break
           end
         end
       end
     end
     #aux = Files.confirm_expanded_form(acronym,aux)
-    return Acronym.new(acronym,aux)
+    return Acronym.new(acronym2,aux)
   end
   #end search_expanded
   
   #funcion que confirma la forma expandida de un acronimo, comprueba que las letras del acronimo son similares a las escogidas de la forma expandida
+  protected
   def self.confirm_expanded_form(acronym,expanded)
     utils = LCS.new()
     expanded_aux = expanded.split(" ").reverse()
@@ -270,15 +269,9 @@ class Files
         end  
       end     
     end
-#    result2 = ""
-#    aux.each() do |word|
-#      result2 = result2 + word + " "
-#    end
-#    puts result2
     return result
   end
-  
-  
+    
 #end funciones para recuperar forma expandida   
   protected
   def self.is_number? string
@@ -290,7 +283,7 @@ class Files
   protected
   def count_sections
     count = 0
-    self.sections().each() do |section|
+    @sections.each() do |section|
       if section != nil
         if Files.is_number?(section[0])
           count = count + 1
@@ -323,18 +316,8 @@ class Files
       end
     end
     return sections[0].split(" ").reverse!()
-
-     # sections[0] = sections[0].to_s.split(" ")
-    
-##fallo al hacer split sobre todas las secciones   
-#################################################
-#    for i in (0..sections.length-2)
-#      aux[0].concat(aux[i+1])
-#    end
-#    
-#    aux2 = aux[0].reverse().to_s
-#    puts aux2
   end
+  
   #funcion que muestra el contenido según lo indica el enunciado de la practica
   protected 
   def show_information

@@ -135,6 +135,7 @@ class Files
     return array_return
   end
   
+  #funcion que elimina parentesis y signos de puntuación en los acronimos encontrados
   protected 
   def self.clean_acronym(list)
     list.each do |acronym|
@@ -142,6 +143,7 @@ class Files
     end
   end
   
+  #funcion que determina si una palabra pasada por cabecera es un acronimo o no pasandole diversos filtros
   protected
   def self.is_acronym(acronym)
     utils = LCS.new()
@@ -273,6 +275,8 @@ class Files
   end
     
 #end funciones para recuperar forma expandida   
+  
+############################### funciones auxiliares ###################################################
   protected
   def self.is_number? string
     true if Float(string) rescue false

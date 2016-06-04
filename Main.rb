@@ -21,6 +21,7 @@ class Main
       puts "8. Dado un acrónimo, mostrar información de todos los documentos que aparezcan en el acrónimo."
       puts "9. Mostrar los grupos de documentos según su temática."
       puts "10. Calcular ciertas estadísticas relacionadas con los grupos de documentos similares:"
+      puts "11.volver a leer los ficheros, solo dar si se incluyen nuevos ficheros a la carpeta docsUTF8"
       puts "0. Salir del menu"
     end
 end
@@ -34,10 +35,12 @@ end
       case main.option
       when 0
         puts "gracias por usar la app"
+        break
       when 1
         puts "introduzca un año"
         x = gets.chomp
-        puts ejercicios.ejercicio1(x).sort! + "\n"
+        ejercicios.ejercicio1(x) 
+        puts "\n"
       when 2
         puts ejercicios.ejercicio2()
       when 3
@@ -68,6 +71,8 @@ end
         ejercicios.ejercicio9()
       when 10
         ejercicios.ejercicio10() 
+      when 11
+        ejercicios = Exercises.new()
       else 
         puts "opcion no valida."
       end

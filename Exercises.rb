@@ -42,18 +42,20 @@ class Exercises
         result_ex1.push(aux)
       end
     end
-    return result_ex1
-  end
-  #puts result_ex1.sort()
-  #end ejercicio1
+    #return result_ex1
+  
+  puts result_ex1.sort!()
+  end #ejercicio1
   
 #################################################  ejercicio 2  #################################################################
   def ejercicio2()
     result_ex2 = Array.new()
     @files.each() do |file|
       if file.at_or_do() == 1
+        if file != nil
         if not result_ex2.include?(file.magazine_name())
           result_ex2.push(file.exercise_2())
+        end
         end
       end
     end

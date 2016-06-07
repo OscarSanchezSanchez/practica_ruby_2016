@@ -20,17 +20,7 @@ class Files
     #implementan las clases hijas
   end
   #################################################  ejercicio 1  #################################################################
-  def exercise_1(year)
-    #implemantan las clases hijas
-  end
-  
-  #################################################  ejercicio 2  #################################################################
-  def exercise_2
-    #implemantada en la clase hija article, ya que nombre de revista solo esta disponible en esta
-  end
-
-  #################################################  ejercicio 3  #################################################################
-  def exercise_3(acronym)
+  def exercise_1(acronym)
     found = false
     @sections.each() do |section|
       if section != nil 
@@ -45,22 +35,21 @@ class Files
     end
   end
 
+  
+  #################################################  ejercicio 2  #################################################################
+  def exercise_2(magazine_name,acronym)
+    #implementación en la clase hija articles
+  end
+  #end ejercicio2
+  
+  #################################################  ejercicio 3  #################################################################
+  def exercise_3
+    return take_expanded_form()
+  end
   #end ejercicio3
   
   #################################################  ejercicio 4  #################################################################
-  def exercise_4(magazine_name,acronym)
-    #implementación en la clase hija articles
-  end
-  #end ejercicio4
-  
-  #################################################  ejercicio 5  #################################################################
-  def exercise_5
-    return take_expanded_form()
-  end
-  
-  
-  #################################################  ejercicio 6  #################################################################
-  def exercise_6(id)
+  def exercise_4(id)
     if id === @ID
       list_p = @acronyms
       list = @acronyms_parenthesis
@@ -74,6 +63,20 @@ class Files
     end
   end
   
+  #################################################  ejercicio 5  #################################################################
+  def exercise_5
+    
+    if @acronyms.empty?
+      return "-Título: "+ self.title+"\n" + "*Identificador: " + self.ID()+"\n"
+    else
+      return nil
+    end
+  end
+  #end ejercicio7
+  
+  #################################################  ejercicio 6  #################################################################
+  def exercise_6 
+  end
 #################################################  ejercicio 7  #################################################################
   def exercise_7
     
@@ -93,10 +96,10 @@ class Files
   end
   #end ejercicio8
   
-  #ejercicio9
-  def exercise_9
-    
-  end
+#################################################  ejercicio 9  #################################################################
+#  def exercise_9
+#    
+#  end
 #############################  funciones para sacar la lista de acronimos de un fichero  #########################################
   #funcion para encontrar la lista de acronimos de los ficheros
   protected

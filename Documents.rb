@@ -32,20 +32,13 @@ class Documents < Files
     return sections
   end
   
-  #ejercicio1
-  def exercise_1(year)
-    if (year == @year)
-      return @title
-    else
-      return nil
-    end
-  end
-  
-  #ejercicio3
-  def exercise_3(acronym)
+#################################################  ejercicio 1  #################################################################
+  def exercise_1(acronym)
     super(acronym)
   end
-  #end ejercico3
+
+#################################################  ejercicio 3  #################################################################
+
   
   #muestra la información de un documento de la wikipedia
   def show_information

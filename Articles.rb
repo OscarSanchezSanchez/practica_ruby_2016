@@ -41,25 +41,42 @@ class Articles < Files
     return sections
   end
   
-  #ejercicio1
-  def exercise_1(year)
-    if (year == @year)
-      return @title
+#################################################  ejercicio 1  #################################################################
+  def exercise_1(acronym)
+    super(acronym)
+  end
+
+#################################################  ejercicio 2  #################################################################
+  def exercise_2(magazine_name,acronym)
+    found = false
+    # magazine_name == self.magazine_name() no compara los string bien 
+    if (@magazine_name.include?(magazine_name))
+      aux = @sections
+      aux.each() do |section|
+        if section != nil
+          if section.include?(acronym)
+            found = true
+            break
+          end
+        end
+      end
+      if found
+        return @title
+      else
+        return nil
+      end 
     else
-      return nil
+      return nil 
     end
   end
   
-  #ejercicio2
-  def exercise_2()
-    return @magazine_name
-  end  
-  #ejercicio3
-  def exercise_3(acronym)
-    super(acronym)
-  end
-  #ejercicio4
-  def exercise_4(magazine_name,acronym)
+#################################################  ejercicio 3  #################################################################
+  
+#################################################  ejercicio 4  #################################################################
+
+# este es el 4 antiguo
+# este es el 4 antiguo
+  def exercise_445(magazine_name,acronym) # este es el 4 antiguo
     found = false
     # magazine_name == self.magazine_name() no compara los string bien 
     if (@magazine_name.include?(magazine_name))

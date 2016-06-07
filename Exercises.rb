@@ -34,74 +34,40 @@ class Exercises
   #fin lectura y formateo de ficheros
   
 #################################################  ejercicio 1  #################################################################
-  def ejercicio1(year)
+  def ejercicio1(acronym)
     result_ex1 = Array.new()
     @files.each() do |file|
-      aux = file.exercise_1(year)
-      if aux != nil
-        result_ex1.push(aux)
-      end
-    end
-    #return result_ex1
-  
-  puts result_ex1.sort!()
-  end #ejercicio1
-  
-#################################################  ejercicio 2  #################################################################
-  def ejercicio2()
-    result_ex2 = Array.new()
-    @files.each() do |file|
-      if file.at_or_do() == 1
-        if file != nil
-        if not result_ex2.include?(file.magazine_name())
-          result_ex2.push(file.exercise_2())
-        end
-        end
-      end
-    end
-    return result_ex2.sort!()
-  end
-  #puts result_ex2.sort!()
-  #end ejercicio2
-  
-#################################################  ejercicio 3  #################################################################
-  def ejercicio3(acronym)
-    result_ex3 = Array.new()
-    @files.each() do |file|
-      aux = file.exercise_3(acronym)
-      if not result_ex3.include?(aux)
+      aux = file.exercise_1(acronym)
+      if not result_ex1.include?(aux)
         if aux!=nil
-          result_ex3.push(aux)
+          result_ex1.push(aux)
         end
       end
     end
-    return result_ex3
+    return result_ex1
   end
-  #puts result_ex3.sort!()
-  #end ejercicio3
-  
-#################################################  ejercicio 4  #################################################################
-  def ejercicio4(magazine_name,acronym)
-    result_ex4 = Array.new()
+
+#################################################  ejercicio 2  #################################################################
+  def ejercicio2(magazine_name,acronym)
+    result_ex2 = Array.new()
     #coger acronimo y nombre de revista por pantalla
     @files.each() do |file|
-      aux = file.exercise_4(magazine_name,acronym)
-      if not result_ex4.include?(aux)
+      aux = file.exercise_2(magazine_name,acronym)
+      if not result_ex2.include?(aux)
         if aux != nil
-          result_ex4.push(aux)
+          result_ex2.push("-"+aux)
         end
       end
     end
-    return result_ex4
+    if result_ex2.empty? 
+      return "No hay acronimos para esta revista"
+    else
+      return result_ex2
+    end
   end
-#  result_ex4.sort_by! do |item|
-#      item[:title]
-#  end
-  #puts result_ex4.sort!()
-  #end ejercicio4
- 
-#################################################  ejercicio 5  #################################################################
-  def ejercicio5(year)
+  
+#################################################  ejercicio 3  #################################################################
+  def ejercicio3(year)
     list = search_expanded_form_by_year(year)
     for i in (0..list.length-1)
       for j in (0..list[i].length())
@@ -113,94 +79,129 @@ class Exercises
   end
   
   def search_expanded_form_by_year(year)
-    result_ex5 = Array.new()
+    result_ex3 = Array.new()
     @files.each() do |file|
       if file.year() === year #pedir por pantalla
-        result_ex5.push(file.exercise_5)
+        result_ex3.push(file.exercise_3)
       end
     end
-    return result_ex5
+    return result_ex3
   end
-#  puts result_ex5[1][0].expanded_form
-#  puts result_ex5[1][0].acronym 
+
   
-  
-#################################################  ejercicio 6  #################################################################
-  def ejercicio6(id)
+#################################################  ejercicio 4  #################################################################
+  def ejercicio4(id)
     result_ex6 = Array.new()
     @files.each() do |file|
-      file.exercise_6(id)
+      file.exercise_4(id)
     end
   end
-  #end ejercicio6
-  
-#################################################  ejercicio 7  #################################################################
-  def ejercicio7()
+  #end ejercicio4
+ 
+#################################################  ejercicio 5  #################################################################
+  def ejercicio5()
     @files.each() do |file|
-      aux = file.exercise_7()
+      aux = file.exercise_5()
       if aux!=nil
         puts aux
       end
     end
-  end
-
-#################################################  ejercicio 8  #################################################################
-  def ejercicio8(acronym)
-    @files.each() do |file|
-      file.exercise_8(acronym)
+  end  
+  
+#################################################  ejercicio 6  #################################################################
+def ejercicio6
+  if @groups.groups().empty?
+    puts "no se ha obtenido ningún grupo"
+  else   
+    for i in (0..(@groups.groups().length()-1))
+      puts "Cluster " + (i+1).to_s
+      for j in (0..(@groups.groups()[i].length()-1))
+        puts @groups.groups()[i][j].ID()+ " - " + @groups.groups()[i][j].title()
+      end
     end
   end
+end
+#funcion que inicializa el atributo groups de la clase exercises, para despues mostrar los clusters en la llamada a la funcion ejercicio9
+def clusters
+  utils = LCS.new() 
+  number_cluster = 1
+  cluster = Cluster.new()
+  for i in (0..@files.length-1)
+    file = @files[i]
+    acronym_string1 = "" #string donde pondremos toda la lista de acronimos de un fichero 
+    for k in (0..file.acronyms.length-1)
+      acronym_string1 = acronym_string1 + file.acronyms[k] + " "
+    end
+    cluster.groups()[number_cluster-1] = Array.new()
+    cluster.groups()[number_cluster-1].push(file)
+    for j in (0..@files.length-1)
+      if (j == i)
+        next
+      end
+      file_compare = @files[j]
+      acronym_string2 = "" #string donde pondremos toda la lista de acronimos de un fichero 
+      for k in (0..(file.acronyms.length-1))
+        if file_compare.acronyms[k] !=nil
+          acronym_string2 = acronym_string2 + file_compare.acronyms[k] + " "
+        end
+      end
+      if (utils.similars(file.title(),file_compare.title(),15)) && (utils.similars(acronym_string1,acronym_string2,25)) 
+        cluster.groups()[number_cluster-1].push(file_compare)
+      end
+    end
+    if cluster.groups()[number_cluster-1].length() <= 1 
+      cluster.groups().delete_at(number_cluster-1)
+    else
+      number_cluster = number_cluster + 1
+    end#if
+  end#for grande
+  return cluster
+end#ejercicio6
+
+  
+#################################################  ejercicio 7  #################################################################
+def ejercicio7()
+  #supondremos que "la mayoría de los grupos" es que el acrónimo aparezca en más de la mitad de los grupos como poco 
+  @groups.exercise_7()
+end
+
+
+#################################################  ejercicio 8  #################################################################
+def ejercicio8
+  sorted_cluster = @groups.exercise_8()
+  sorted_cluster.reverse!()
+  number_cluster = 1
+  sorted_cluster.each() do |cluster|
+    puts "Cluster " + number_cluster.to_s + " según su tamaño"
+    number_cluster+=1
+    
+    cluster.each() do |file| 
+      puts file.ID() + " - " + file.title()
+    end
+    puts "\n"
+  end
+end
+
     
 #################################################  ejercicio 9  #################################################################
   def ejercicio9
     if @groups.groups().empty?
       puts "no se ha obtenido ningún grupo"
-    else   
-      for i in (0..(@groups.groups().length()-1))
-        puts "Cluster " + (i+1).to_s
-        for j in (0..(@groups.groups()[i].length()-1))
-          puts @groups.groups()[i][j].ID()+ " - " + @groups.groups()[i][j].title()
+    else
+      result_ex9 = Array.new
+      cluster_number = 0
+      @groups.groups().each do |group|
+        cluster_number += 1
+        if group.size > 2
+          puts "Cluster " + cluster_number.to_s + "\n"
+          group.each do |file|
+            puts file.ID()+ " - " + file.title()
+          end
+          puts "\n"
         end
       end
     end
   end
-  #funcion que inicializa el atributo groups de la clase exercises, para despues mostrar los clusters en la llamada a la funcion ejercicio9
-  def clusters
-    utils = LCS.new() 
-    number_cluster = 1
-    cluster = Cluster.new()
-    for i in (0..@files.length-1)
-      file = @files[i]
-      acronym_string1 = "" #string donde pondremos toda la lista de acronimos de un fichero 
-      for k in (0..file.acronyms.length-1)
-        acronym_string1 = acronym_string1 + file.acronyms[k] + " "
-      end
-      cluster.groups()[number_cluster-1] = Array.new()
-      cluster.groups()[number_cluster-1].push(file)
-      for j in (0..@files.length-1)
-        if (j == i)
-          next
-        end
-        file_compare = @files[j]
-        acronym_string2 = "" #string donde pondremos toda la lista de acronimos de un fichero 
-        for k in (0..(file.acronyms.length-1))
-          if file_compare.acronyms[k] !=nil
-            acronym_string2 = acronym_string2 + file_compare.acronyms[k] + " "
-          end
-        end
-        if (utils.similars(file.title(),file_compare.title(),15)) && (utils.similars(acronym_string1,acronym_string2,25)) 
-          cluster.groups()[number_cluster-1].push(file_compare)
-        end
-      end
-      if cluster.groups()[number_cluster-1].length() <= 1 
-        cluster.groups().delete_at(number_cluster-1)
-      else
-        number_cluster = number_cluster + 1
-      end#if
-    end#for grande
-    return cluster
-  end#ejercicio9
-  
   
 #################################################  ejercicio 10  #################################################################
   def ejercicio10()  

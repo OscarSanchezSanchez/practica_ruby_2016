@@ -69,34 +69,7 @@ class Articles < Files
       return nil 
     end
   end
-  
-#################################################  ejercicio 3  #################################################################
-  
-#################################################  ejercicio 4  #################################################################
-
-# este es el 4 antiguo
-# este es el 4 antiguo
-  def exercise_445(magazine_name,acronym) # este es el 4 antiguo
-    found = false
-    # magazine_name == self.magazine_name() no compara los string bien 
-    if (@magazine_name.include?(magazine_name))
-      aux = @sections
-      aux.each() do |section|
-        if section.include?(acronym)
-          found = true
-          break
-        end
-      end
-      if found
-        return @title
-      else
-        return nil
-      end 
-    else
-      return nil 
-    end
-  end
-  
+   
   #muestra la información de un articulo
   def show_information
     puts "-" *15

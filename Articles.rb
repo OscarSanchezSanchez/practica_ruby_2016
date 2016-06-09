@@ -49,7 +49,6 @@ class Articles < Files
 #################################################  ejercicio 2  #################################################################
   def exercise_2(magazine_name,acronym)
     found = false
-    # magazine_name == self.magazine_name() no compara los string bien 
     if (@magazine_name.include?(magazine_name))
       aux = @sections
       aux.each() do |section|

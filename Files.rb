@@ -72,21 +72,11 @@ class Files
       return nil
     end
   end
-  #end ejercicio7
+  #end ejercicio5
   
   #################################################  ejercicio 6  #################################################################
   def exercise_6 
   end
-#################################################  ejercicio 7  #################################################################
-  def exercise_7
-    
-    if @acronyms.empty?
-      return "titulo: "+ self.title+"\n" + "identificador: " + self.ID()+"\n"
-    else
-      return nil
-    end
-  end
-  #end ejercicio7
   
 #################################################  ejercicio 8  #################################################################
   def exercise_8(acronym)

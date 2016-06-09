@@ -162,7 +162,7 @@ end#ejercicio6
 #################################################  ejercicio 7  #################################################################
 def ejercicio7()
   #supondremos que "la mayoría de los grupos" es que el acrónimo aparezca en más de la mitad de los grupos como poco 
-  @groups.exercise_7()
+  @groups.exercise_7()#se inplementa en la clase cluster
 end
 
 
